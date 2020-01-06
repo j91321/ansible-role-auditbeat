@@ -1,0 +1,21 @@
+---
+- name: (Debian/Ubuntu) Install dependencies
+  apt:
+    name:
+      - gnupg
+    state: present
+
+
+- name: (Debian/Ubuntu) Add Elasticsearch repository GPG key
+  apt_key:
+    url: "https://artifacts.elastic.co/GPG-KEY-elasticsearch"
+    state: present
+  tags: install
+
+- name: (Debian/Ubuntu) Add Elasticsearch 7.X repository
+  apt_repository:
+    repo: deb https://artifacts.elastic.co/packages/7.x/apt stable main
+    filename: elastic-repo.list
+    update_cache: yes
+    state: present
+  tags: install

@@ -1,0 +1,7 @@
+---
+auditbeat_output:
+  elasticsearch:
+    hosts:
+      - "localhost:9200"
+    security:
+      enabled: false

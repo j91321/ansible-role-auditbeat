@@ -1,0 +1,55 @@
+---
+- import_tasks: "RedHat.yml"
+  when: ansible_os_family == "RedHat"
+
+- import_tasks: "Debian.yml"
+  when: ansible_os_family == "Debian"
+
+- name: Collect service facts
+  service_facts:
+
+#This is necessary, systemd won't allow auditd to be stopped and Ansible has bug when it doesn't use the service binary even if explicitly told
+- name: Stop auditd
+  command:
+    cmd: service auditd stop
+    warn: False
+  when: ansible_facts.services['auditd'] is defined
+  tags: install
+
+- name: Remove auditd from starting on boot
+  command:
+    cmd: chkconfig auditd off
+    warn: False
+  when: ansible_facts.services['auditd'] is defined
+  tags: install
+
+- name: Install auditbeat
+  package:
+    name: auditbeat
+    state: present
+  tags: install
+
+- name: Create auditbeat configuration file
+  template:
+    src: auditbeat.yml.j2
+    dest: "{{ auditbeat_service.config_path }}/auditbeat.yml"
+  notify: restart-auditbeat
+  tags: configure
+
+- name: Install auditing rules for auditbeat
+  copy:
+    src: files/auditd-attack.conf
+    dest: "{{ auditbeat_service.config_path }}/audit.rules.d/"
+    owner: root
+    group: root
+    mode: '0644'
+  tags: configure
+  notify: restart-auditbeat
+  when: auditbeat_service.install_rules
+
+- name: Setup auditbeat service
+  service:
+    name: auditbeat
+    enabled: "{{ auditbeat_service.enabled }}"
+    state: "{{ auditbeat_service.state }}"
+  tags: configure

@@ -1,0 +1,10 @@
+---
+- name: (REHL/CentOS) Add Elasticsearch 7.X repository
+  yum_repository:
+    name: "elastic-7.x"
+    description: "Elastic repository for 7.x packages"
+    baseurl: "https://artifacts.elastic.co/packages/7.x/yum"
+    gpgkey: "https://packages.elastic.co/GPG-KEY-elasticsearch"
+    state: present
+  notify: yum-clean-metadata
+  tags: install
