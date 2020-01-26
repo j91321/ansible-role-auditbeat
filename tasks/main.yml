@@ -46,10 +46,3 @@
   tags: configure
   notify: restart-auditbeat
   when: auditbeat_service.install_rules
-
-- name: Setup auditbeat service
-  service:
-    name: auditbeat
-    enabled: "{{ auditbeat_service.enabled }}"
-    state: "{{ auditbeat_service.state }}"
-  tags: configure

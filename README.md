@@ -52,8 +52,6 @@ Specifies the output configuration to Elasticsearch with security enabled, certi
 Ansible variables from `vars/main.yml`
 
     auditbeat_service:
-      enabled: yes
-      state: restarted
       config_path: /etc/auditbeat
       install_rules: true
     auditbeat_module:

@@ -3,6 +3,7 @@
   apt:
     name:
       - gnupg
+      - apt-transport-https
     state: present
 
 
