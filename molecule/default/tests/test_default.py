@@ -24,6 +24,6 @@ def test_auditbeat_rules(host):
     assert rules.is_file
 
 
-def test_auditbeat_rules_installation(host):
-    list_rules = host.run("auditbeat show auditd-rules")
-    assert len(list_rules.stdout) > 
+# def test_auditbeat_rules_installation(host):
+#    list_rules = host.run("auditbeat show auditd-rules")
+#    assert len(list_rules.stdout) > 10
