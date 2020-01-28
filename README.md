@@ -95,7 +95,7 @@ Example Playbook
             hosts:
               - "172.16.0.11:9200"
               - "172.16.0.12:9200"
-              - "171.16.0.13:9200"
+              - "172.16.0.13:9200"
             security:
               enabled: true
               username: auditbeat
