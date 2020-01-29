@@ -470,6 +470,22 @@
 			"comment": "",
 			"enabled": true,
 			"metadata": []
+		},
+		{
+			"techniqueID": "T1014",
+			"tactic": "defense-evasion",
+			"color": "#31a354",
+			"comment": "",
+			"enabled": true,
+			"metadata": []
+		},
+		{
+			"techniqueID": "T1501",
+			"tactic": "persistence",
+			"color": "#31a354",
+			"comment": "",
+			"enabled": true,
+			"metadata": []
 		}
 	],
 	"gradient": {

@@ -1,7 +1,7 @@
 ansible-role-auditbeat
 =========
 
-An Ansible role that replaces auditd with Auditbeat. Included modified version of rules from [bfuzzy/auditd-attack](https://github.com/bfuzzy/auditd-attack). 
+An Ansible role that replaces auditd with Auditbeat. Included modified version of rules from [bfuzzy1/auditd-attack](https://github.com/bfuzzy1/auditd-attack). 
 
 Please test the rules properly before using on production. Some rules may cause performance impact depending on your setup. For more information on Auditbeat please visit the official [documentation](https://www.elastic.co/guide/en/beats/auditbeat/current/auditbeat-overview.html)
 
