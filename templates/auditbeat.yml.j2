@@ -66,16 +66,15 @@ output.elasticsearch:
   # Array of hosts to connect to.
   hosts: {{ auditbeat_output.elasticsearch.hosts | to_json }}
 
-  {% if auditbeat_output.elasticsearch.security.enabled | bool %}
+{% if auditbeat_output.elasticsearch.security.enabled | bool %}
   # Optional protocol and basic auth credentials.
   username: {{ auditbeat_output.elasticsearch.security.username }}
   password: {{ auditbeat_output.elasticsearch.security.password }}
   protocol: {{ auditbeat_output.elasticsearch.security.protocol }}
-  {% if auditbeat_output.elasticsearch.security.ssl_certificate_authorities is defined %}
-  ssl.certificate.authorities:
-  {{ auditbeat_output.elasticsearch.security.ssl_certificate_authorities | to_nice_yaml | trim | indent(4) }}
-  {% endif %}
-  {% endif %}
+{% if auditbeat_output.elasticsearch.security.ssl_certificate_authorities is defined %}
+  ssl.certificate_authorities: {{ auditbeat_output.elasticsearch.security.ssl_certificate_authorities | to_json }}
+{% endif %}
+{% endif %}
 {% endif %}
 {% if auditbeat_output.type == "logstash" %}
 #----------------------------- Logstash output --------------------------------
@@ -83,11 +82,11 @@ output.logstash:
   # The Logstash hosts
   hosts: {{ auditbeat_output.logstash.hosts | to_json }}
 
-  {% if auditbeat_output.logstash.security.ssl_certificate_authorities is defined %}}
+{% if auditbeat_output.logstash.security.ssl_certificate_authorities is defined %}}
   # Optional SSL. By default is off.
   # List of root certificates for HTTPS server verifications
   ssl.certificate_authorities: {{ auditbeat_output.logstash.security.ssl_certificate_authorities | to_json }}
-  {% endif %}
+{% endif %}
 {% endif %}
 #================================ Processors =====================================
 
