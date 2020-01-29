@@ -32,7 +32,7 @@ auditbeat.modules:
   login.btmp_file_pattern: {{ auditbeat_module.system.login_btmp_pattern | default('/var/log/btmp*') }}
 {% endif %}
 #==================== Elasticsearch template setting ==========================
-setup.template.enabled: {{ auditbeat_template.enabled | default(false) }}
+setup.template.enabled: {{ auditbeat_template.enabled | default(true) }}
 setup.template.settings:
   index.number_of_shards: {{ auditbeat_template.number_of_shards | default(1) }}
 
@@ -55,6 +55,17 @@ cloud.id: {{ auditbeat_cloud.id }}
 # The cloud.auth setting overwrites the `output.elasticsearch.username` and
 # `output.elasticsearch.password` settings. The format is `<user>:<pass>`.
 cloud.auth: {{ auditbeat_cloud.auth }}
+{% endif %}
+
+{% if auditbeat_ilm is defined %}
+#=================================== ILM ======================================
+setup.ilm.enabled: {{ auditbeat_ilm.enabled | default("auto") }}
+{% if auditbeat_ilm.enabled != "false" %} 
+setup.ilm.rollover_alias: {{ auditbeat_ilm.rollover_alias | default("auditbeat-%{[agent.version]}") }}
+setup.ilm.pattern: {{ auditbeat_ilm.pattern | default("%{now/d}-000001") }}
+setup.ilm.policy_name: {{ auditbeat_ilm.policy_name | default("auditbeat-%{[agent.version]}") }}
+setup.ilm.check_exists: {{ auditbeat_ilm.check_exists | default(true) }}
+{% endif %}
 {% endif %}
 #================================ Outputs =====================================
 
