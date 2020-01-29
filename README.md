@@ -27,6 +27,7 @@ Role Variables
 Ansible variables from `defaults/main.yml`
 
     auditbeat_output:
+      type: elasticsearch
       elasticsearch:
         hosts:
           - "localhost:9200"
@@ -36,6 +37,7 @@ Ansible variables from `defaults/main.yml`
 Specifies the output configuration to Elasticsearch without Security enabled.
 
     auditbeat_output:
+      type: elasticsearch
       elasticsearch:
         hosts:
           - "localhost:9200"
@@ -48,6 +50,8 @@ Specifies the output configuration to Elasticsearch without Security enabled.
             - "/etc/ca/my_ca.crt"
 
 Specifies the output configuration to Elasticsearch with security enabled, certificate authority must be present on server.
+
+Variable `auditbeat_output.type` takes two values either `logstash` or `elasticsearch`. This is because if you have ansible `hash_behaviour` set to `merge` role would install both elasticsearch and logstash outputs when using logstash output type which is wrong.
 
 Ansible variables from `vars/main.yml`
 

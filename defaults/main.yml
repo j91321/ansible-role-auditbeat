@@ -1,5 +1,6 @@
 ---
 auditbeat_output:
+  type: "elasticsearch"
   elasticsearch:
     hosts:
       - "localhost:9200"

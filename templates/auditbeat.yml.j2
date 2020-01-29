@@ -60,7 +60,7 @@ cloud.auth: {{ auditbeat_cloud.auth }}
 
 # Configure what output to use when sending the data collected by the beat.
 
-{% if auditbeat_output.elasticsearch is defined %}
+{% if auditbeat_output.type == "elasticsearch" %}
 #-------------------------- Elasticsearch output ------------------------------
 output.elasticsearch:
   # Array of hosts to connect to.
@@ -77,7 +77,7 @@ output.elasticsearch:
   {% endif %}
   {% endif %}
 {% endif %}
-{% if auditbeat_output.logstash is defined %}
+{% if auditbeat_output.type == "logstash" %}
 #----------------------------- Logstash output --------------------------------
 output.logstash:
   # The Logstash hosts
