@@ -1,0 +1,20 @@
+[
+  {
+    "_id": "Program-Executions-in-Suspicious-Folders",
+    "_type": "search",
+    "_source": {
+      "title": "Sigma: Program Executions in Suspicious Folders",
+      "description": "Detects program executions in suspicious non-program folders related to malware or hacking activity",
+      "hits": 0,
+      "columns": [],
+      "sort": [
+        "@timestamp",
+        "desc"
+      ],
+      "version": 1,
+      "kibanaSavedObjectMeta": {
+        "searchSourceJSON": "{\"index\": \"auditbeat-*\", \"filter\": [], \"highlight\": {\"pre_tags\": [\"@kibana-highlighted-field@\"], \"post_tags\": [\"@/kibana-highlighted-field@\"], \"fields\": {\"*\": {}}, \"require_field_match\": false, \"fragment_size\": 2147483647}, \"query\": {\"query_string\": {\"query\": \"(auditd.data.syscall:\\\"execve\\\" AND process.executable:(\\\\/tmp\\\\/* OR \\\\/var\\\\/www\\\\/* OR \\\\/home\\\\/*\\\\/public_html\\\\/* OR \\\\/usr\\\\/local\\\\/apache2\\\\/* OR \\\\/usr\\\\/local\\\\/httpd\\\\/* OR \\\\/var\\\\/apache\\\\/* OR \\\\/srv\\\\/www\\\\/* OR \\\\/home\\\\/httpd\\\\/html\\\\/* OR \\\\/srv\\\\/http\\\\/* OR \\\\/usr\\\\/share\\\\/nginx\\\\/html\\\\/* OR \\\\/var\\\\/lib\\\\/pgsql\\\\/data\\\\/* OR \\\\/usr\\\\/local\\\\/mysql\\\\/data\\\\/* OR \\\\/var\\\\/lib\\\\/mysql\\\\/* OR \\\\/var\\\\/vsftpd\\\\/* OR \\\\/etc\\\\/bind\\\\/* OR \\\\/var\\\\/named\\\\/*))\", \"analyze_wildcard\": true}}}"
+      }
+    }
+  }
+]

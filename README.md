@@ -3,6 +3,8 @@ ansible-role-auditbeat
 
 An Ansible role that replaces auditd with Auditbeat. Included modified version of rules from [bfuzzy1/auditd-attack](https://github.com/bfuzzy1/auditd-attack). 
 
+![MITRE ATT&CK framework mapping](https://raw.githubusercontent.com/j91321/ansible-role-auditbeat/master/extras/layer.svg?sanitize=true)
+
 Please test the rules properly before using on production. Some rules may cause performance impact depending on your setup. For more information on Auditbeat please visit the official [documentation](https://www.elastic.co/guide/en/beats/auditbeat/current/auditbeat-overview.html)
 
 Supported platfroms:
@@ -105,6 +107,30 @@ Example Playbook
               username: auditbeat
               password: auditbeatpassword
               protocol: http
+
+
+Extras
+------
+
+In the extras folder you can find several prepared Kibana saved searches based on [Sigma auditd rules](https://github.com/Neo23x0/sigma/tree/master/rules/linux/auditd). These saved searches will work with default index pattern auditbeat-\*. If you use different index pattern you must modify the saved objects with appropriate index pattern and field names.
+
+Installation steps:
+
+ 1. Go to **Kibana->Management->Index Patterns**
+ 2. Click **Create index pattern**
+ 3. Into the **Index pattern field** write *auditbeat-** and click **Next step**
+ 4. Select *@timestamp* as **Time Filter field name**
+ 5. Click **Show advanced options**
+ 6.  Set **Custom index pattern** ID to *auditbeat-**
+ 7. Click **Create index pattern**
+
+Next import the saved searches from this repository:
+
+ 1. Go to **Kibana->Management->Saved Objects**
+ 2. Click **Import**
+ 3. Select the saved search json file which you want to import
+ 4. Click **Import**
+ 5. Repeat for all saved searches
 
 License
 -------

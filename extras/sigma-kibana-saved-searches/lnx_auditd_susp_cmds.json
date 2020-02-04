@@ -1,0 +1,20 @@
+[
+  {
+    "_id": "Detects-Suspicious-Commands-on-Linux-systems",
+    "_type": "search",
+    "_source": {
+      "title": "Sigma: Detects Suspicious Commands on Linux systems",
+      "description": "Detects relevant commands often related to malware or hacking activity",
+      "hits": 0,
+      "columns": [],
+      "sort": [
+        "@timestamp",
+        "desc"
+      ],
+      "version": 1,
+      "kibanaSavedObjectMeta": {
+        "searchSourceJSON": "{\"index\": \"auditbeat-*\", \"filter\": [], \"highlight\": {\"pre_tags\": [\"@kibana-highlighted-field@\"], \"post_tags\": [\"@/kibana-highlighted-field@\"], \"fields\": {\"*\": {}}, \"require_field_match\": false, \"fragment_size\": 2147483647}, \"query\": {\"query_string\": {\"query\": \"(auditd.data.syscall:\\\"execve\\\" AND ((process.name:\\\"chmod\\\" AND process.args:\\\"777\\\") OR (process.name:\\\"chmod\\\" AND process.args:\\\"u\\\\+s\\\") OR (process.name:\\\"cp\\\" AND process.args:\\\"\\\\/bin\\\\/ksh\\\") OR (process.name:\\\"cp\\\" AND process.args:\\\"\\\\/bin\\\\/sh\\\")))\", \"analyze_wildcard\": true}}}"
+      }
+    }
+  }
+]
