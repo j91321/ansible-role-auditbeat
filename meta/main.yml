@@ -1,5 +1,6 @@
 ---
 galaxy_info:
+  role_name: auditbeat
   author: Ján Trenčanský
   description: Install Auditbeat for security monitoring, supplied ruleset.
   company: None
