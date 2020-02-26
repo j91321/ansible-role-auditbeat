@@ -53,7 +53,7 @@ Specifies the output configuration to Elasticsearch without Security enabled.
 
 Specifies the output configuration to Elasticsearch with security enabled, certificate authority must be present on server.
 
-Variable `auditbeat_output.type` takes two values either `logstash` or `elasticsearch`. This is because if you have ansible `hash_behaviour` set to `merge` role would install both elasticsearch and logstash outputs when using logstash output type which is wrong.
+Variable `auditbeat_output.type` takes three values either `logstash`, `elasticsearch` or `redis`. This is because if you have ansible `hash_behaviour` set to `merge` role would install both elasticsearch and logstash outputs when using logstash output type which is wrong.
 
 Ansible variables from `vars/main.yml`
 
