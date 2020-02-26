@@ -28,6 +28,9 @@ Role Variables
 --------------
 Ansible variables from `defaults/main.yml`
 
+    auditbeat_service:
+      config_path: /etc/auditbeat
+      install_rules: true
     auditbeat_output:
       type: elasticsearch
       elasticsearch:
@@ -35,6 +38,8 @@ Ansible variables from `defaults/main.yml`
           - "localhost:9200"
         security:
           enabled: false
+
+The `auditbeat_service.install_rules` can be changed to false if you don't want to use the rules included.
 
 Specifies the output configuration to Elasticsearch without Security enabled.
 
@@ -57,9 +62,6 @@ Variable `auditbeat_output.type` takes three values either `logstash`, `elastics
 
 Ansible variables from `vars/main.yml`
 
-    auditbeat_service:
-      config_path: /etc/auditbeat
-      install_rules: true
     auditbeat_module:
       auditd:
         enabled: true
@@ -81,7 +83,7 @@ Ansible variables from `vars/main.yml`
           - socket
           - user
 
-These variables are the auditbeat defaults and fit most common use-cases. The `auditbeat_service.install_rules` can be changed to false if you don't want to use the rules included.
+These variables are the auditbeat defaults and fit most common use-cases.
 
 Dependencies
 ------------

@@ -1,4 +1,8 @@
 ---
+auditbeat_service:
+  config_path: /etc/auditbeat
+  install_rules: true
+
 auditbeat_output:
   type: "elasticsearch"
   elasticsearch:

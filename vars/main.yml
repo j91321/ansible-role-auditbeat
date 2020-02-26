@@ -1,8 +1,5 @@
 ---
 # vars file for ansible-role-auditbeat
-auditbeat_service:
-  config_path: /etc/auditbeat
-  install_rules: true
 auditbeat_module:
   auditd:
     enabled: true
