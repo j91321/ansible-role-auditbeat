@@ -1,0 +1,66 @@
+---
+- name: Create 64-bit install directory
+  win_file:
+    path: "{{ auditbeat_service.install_path_64 }}"
+    state: directory
+
+- name: Check if auditbeat service is installed
+  win_service:
+    name: auditbeat
+  register: auditbeat_installed
+
+- name: Check if auditbeat is using current version
+  win_stat:
+    path: "{{ auditbeat_service.install_path_64 }}\\auditbeat-{{ auditbeat_service.version }}-windows-x86_64"
+  register: auditbeat_folder
+
+- name: Copy auditbeat uninstall script
+  win_copy:
+    src: files/uninstall-service-auditbeat.ps1
+    dest: "{{ auditbeat_service.install_path_64 }}\\uninstall-service-auditbeat.ps1"
+    force: yes
+  when: auditbeat_installed.exists and not auditbeat_folder.stat.exists
+
+- name: Uninstall auditbeat
+  win_shell: .\uninstall-service-auditbeat.ps1
+  args:
+    chdir: "{{ auditbeat_service.install_path_64 }}"
+  when: auditbeat_installed.exists and not auditbeat_folder.stat.exists
+
+- name: Download auditbeat
+  win_get_url:
+    url: "https://artifacts.elastic.co/downloads/beats/auditbeat/auditbeat-{{ auditbeat_service.version }}-windows-x86_64.zip"
+    dest: "{{ auditbeat_service.install_path_64 }}\\auditbeat.zip"
+  when: auditbeat_service.download and not auditbeat_folder.stat.exists
+
+- name: Copy auditbeat
+  win_copy:
+    src: "files/auditbeat-{{ auditbeat_service.version }}-windows-x86_64.zip"
+    dest: "{{ auditbeat_service.install_path_64 }}\\auditbeat.zip"
+  when: not auditbeat_service.download and not auditbeat_folder.stat.exists
+
+- name: Unzip auditbeat
+  win_unzip:
+    src: "{{ auditbeat_service.install_path_64 }}\\auditbeat.zip"
+    dest: "{{ auditbeat_service.install_path_64 }}\\"
+    delete_archive: yes
+  when: not auditbeat_folder.stat.exists
+
+- name: Configure auditbeat
+  win_template:
+    src: auditbeat-windows.yml.j2
+    dest: "{{ auditbeat_service.install_path_64 }}\\auditbeat-{{ auditbeat_service.version }}-windows-x86_64\\auditbeat.yml"
+    notify: restart-auditbeat-windows
+
+- name: Install auditbeat
+  win_shell: .\install-service-auditbeat.ps1
+  args:
+    chdir: "{{ auditbeat_service.install_path_64 }}\\auditbeat-{{ auditbeat_service.version }}-windows-x86_64\\"
+  when: not auditbeat_folder.stat.exists
+  notify: restart-auditbeat-windows
+
+- name: Remove other auditbeat installations
+  win_shell: |
+    $version="{{ auditbeat_service.version }}"
+    Get-ChildItem -Path "{{ auditbeat_service.install_path_64 }}" | Where-Object {$_.Name -CNotMatch $version} | Remove-Item -Recurse
+  when: not auditbeat_folder.stat.exists

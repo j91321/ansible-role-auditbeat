@@ -7,3 +7,5 @@
   service:
     name: auditbeat
     state: restarted
+- name: restart-auditbeat-windows
+  win_shell: Restart-Service auditbeat

@@ -1,38 +1,56 @@
 ---
+- import_tasks: "Windows32bit.yml"
+  when:
+    - ansible_os_family == "Windows"
+    - ansible_architecture == "32-bit"
+
+- import_tasks: "Windows64bit.yml"
+  when:
+    - ansible_os_family == "Windows"
+    - ansible_architecture == "64-bit"
+
 - import_tasks: "RedHat.yml"
   when: ansible_os_family == "RedHat"
 
 - import_tasks: "Debian.yml"
   when: ansible_os_family == "Debian"
 
+# Following plays are Linux only specific, all Windows plays are in Windows32bit.yml and Windows64bit.yml
 - name: Collect service facts
   service_facts:
-
+  when:
+    - ansible_os_family != "Windows"
 #This is necessary, systemd won't allow auditd to be stopped and Ansible has bug when it doesn't use the service binary even if explicitly told
 - name: Stop auditd
   command:
     cmd: service auditd stop
     warn: False
-  when: ansible_facts.services['auditd'] is defined
+  when:
+    - ansible_facts.services['auditd'] is defined
+    - ansible_os_family != "Windows"
   tags: install
 
 - name: Remove auditd from starting on boot
   command:
     cmd: chkconfig auditd off
     warn: False
-  when: ansible_facts.services['auditd'] is defined
+  when:
+    - ansible_facts.services['auditd'] is defined
+    - ansible_os_family != "Windows"
   tags: install
 
 - name: Install auditbeat
   package:
     name: auditbeat
     state: present
+  when: ansible_os_family != "Windows"
   tags: install
 
 - name: Create auditbeat configuration file
   template:
     src: auditbeat.yml.j2
     dest: "{{ auditbeat_service.config_path }}/auditbeat.yml"
+  when: ansible_os_family != "Windows"
   notify: restart-auditbeat
   tags: configure
 
@@ -44,5 +62,7 @@
     group: root
     mode: '0644'
   tags: configure
+  when:
+    - ansible_os_family != "Windows"
+    - ansible_service.install_rules
   notify: restart-auditbeat
-  when: auditbeat_service.install_rules
