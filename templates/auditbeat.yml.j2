@@ -107,6 +107,9 @@ output.redis:
   password: {{ auditbeat_output.redis.password }}
 {% endif %}
   key: {{ auditbeat_output.redis.key }}
+{% if auditbeat_output.redis.timeout is defined %}
+  timeout: {{ auditbeat_output.redis.timeout }}
+{% endif %}
 {% endif %}
 #================================ Processors =====================================
 
