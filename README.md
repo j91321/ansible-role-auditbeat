@@ -14,8 +14,13 @@ Supported platfroms:
 - CentOS 6
 - Debian 9
 - Debian 8
+- Windows 10\*
+- Windows Server 2019\*
+- Windows Server 2016\*
 
 Auditbeat should also work on Oracle Enterprise Linux but only with RHCK.
+
+\* Auditbeat on Windows supports different set of features. If you wish to achieve similar functionality use Sysmon + Winlogbeat
 
 If you wish to run Auditbeat from docker container use the official docker [image](https://hub.docker.com/_/auditbeat) provided by Elastic.
 
@@ -29,10 +34,15 @@ Role Variables
 Ansible variables from `defaults/main.yml`
 
     auditbeat_service:
+      install_path_windows64: "C:\\Program Files\\Elastic\\auditbeat"
+      install_path_windows32: "C:\\Program Files\\Elastic\\auditbeat"
+      version: "7.6.0"
+      download: true
       config_path: /etc/auditbeat
       install_rules: true
+
     auditbeat_output:
-      type: elasticsearch
+      type: "elasticsearch"
       elasticsearch:
         hosts:
           - "localhost:9200"
@@ -40,6 +50,8 @@ Ansible variables from `defaults/main.yml`
           enabled: false
 
 The `auditbeat_service.install_rules` can be changed to false if you don't want to use the rules included.
+
+Variable `auditbeat_service.download` affects only Windows installations. If you don't want the clients to download the Windows zip package from the web, you can set it to `false` and place the Windows zip in `files/` folder. Please preserve the naming of the zip file e.g. `files/auditbeat-7.6.2-windows-x86.zip`.  
 
 Specifies the output configuration to Elasticsearch without Security enabled.
 
@@ -60,12 +72,22 @@ Specifies the output configuration to Elasticsearch with security enabled, certi
 
 Variable `auditbeat_output.type` takes three values either `logstash`, `elasticsearch` or `redis`. This is because if you have ansible `hash_behaviour` set to `merge` role would install both elasticsearch and logstash outputs when using logstash output type which is wrong.
 
+Example of Redis output:
+
+    auditbeat_output:
+      type: redis
+      redis:
+        hosts: 
+	  - 192.168.100.4
+	password: "redis_password"
+	key: "auditbeat"
+
 Ansible variables from `vars/main.yml`
 
     auditbeat_module:
       auditd:
         enabled: true
-      file_integrity:
+       file_integrity:
         enabled: true
         paths:
           - /bin
@@ -82,6 +104,19 @@ Ansible variables from `vars/main.yml`
           - process
           - socket
           - user
+    auditbeat_module_windows:
+      file_integrity:
+        enabled: true
+        paths:
+          - C:\windows
+          - C:\windows\system32
+          - C:\Program Files
+          - C:\Program Files (x86)
+      system:
+        enabled: true
+        datasets:
+          - host
+          - process
 
 These variables are the auditbeat defaults and fit most common use-cases.
 
@@ -97,8 +132,22 @@ Example Playbook
     - name: Install auditbeat
       hosts:
         - linux
+	- windows
+      become: yes
       vars:
+        auditbeat_service:
+	  install_path_windows32: "C:\\Program Files\\monitoring\\winlogbeat"
+	  install_path_windows64: "C:\\Program Files\\monitoring\\winlogbeat"
+	  version: "7.6.0"
+	  download: true
+	  install_rules: true
+        auditbeat_template:
+	  enabled: false
+	auditbeat_general:
+	  tags:
+	    - "auditbeat"
         auditbeat_output:
+	  type: "elasticsearch"
           elasticsearch:
             hosts:
               - "172.16.0.11:9200"
@@ -109,6 +158,8 @@ Example Playbook
               username: auditbeat
               password: auditbeatpassword
               protocol: http
+      roles:
+        - ansible-role-auditbeat
 
 
 Extras
