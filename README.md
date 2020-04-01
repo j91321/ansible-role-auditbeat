@@ -128,39 +128,39 @@ None
 Example Playbook
 ----------------
 
-
-    - name: Install auditbeat
-      hosts:
-        - linux
-	- windows
-      become: yes
-      vars:
-        auditbeat_service:
-	  install_path_windows32: "C:\\Program Files\\monitoring\\winlogbeat"
-	  install_path_windows64: "C:\\Program Files\\monitoring\\winlogbeat"
-	  version: "7.6.0"
-	  download: true
-	  install_rules: true
-        auditbeat_template:
-	  enabled: false
-	auditbeat_general:
-	  tags:
-	    - "auditbeat"
-        auditbeat_output:
-	  type: "elasticsearch"
-          elasticsearch:
-            hosts:
-              - "172.16.0.11:9200"
-              - "172.16.0.12:9200"
-              - "172.16.0.13:9200"
-            security:
-              enabled: true
-              username: auditbeat
-              password: auditbeatpassword
-              protocol: http
-      roles:
-        - ansible-role-auditbeat
-
+```
+- name: Install auditbeat
+  hosts:
+    - linux
+    - windows
+  become: yes
+  vars:
+    auditbeat_service:
+      install_path_windows32: "C:\\Program Files\\monitoring\\winlogbeat"
+      install_path_windows64: "C:\\Program Files\\monitoring\\winlogbeat"
+      version: "7.6.0"
+      download: true
+      install_rules: true
+    auditbeat_template:
+      enabled: false
+    auditbeat_general:
+      tags:
+        - "auditbeat"
+    auditbeat_output:
+      type: "elasticsearch"
+      elasticsearch:
+        hosts:
+          - "172.16.0.11:9200"
+          - "172.16.0.12:9200"
+          - "172.16.0.13:9200"
+        security:
+          enabled: true
+          username: auditbeat
+          password: auditbeatpassword
+          protocol: http
+  roles:
+  - ansible-role-auditbeat
+```
 
 Extras
 ------
