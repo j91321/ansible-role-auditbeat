@@ -1,35 +1,21 @@
 # Managed by Ansible
 #==========================  Modules configuration =============================
 auditbeat.modules:
-
-{% if auditbeat_module.auditd.enabled | bool %}
-- module: auditd
-  # Load audit rules from separate files. Same format as audit.rules(7).
-  audit_rule_files: [ '${path.config}/audit.rules.d/*.conf' ]
-{% endif %}
-{% if auditbeat_module.file_integrity.enabled | bool %}
+{% if auditbeat_module_windows.file_integrity.enabled | bool %}
 - module: file_integrity
   paths:
-    {{ auditbeat_module.file_integrity.paths | to_nice_yaml | trim | indent(4) }}
+    {{ auditbeat_module_windows.file_integrity.paths | to_nice_yaml | trim | indent(4) }}
 {% endif %}
-{% if auditbeat_module.system.enabled | bool %}
+{% if auditbeat_module_windows.system.enabled | bool %}
 - module: system
   datasets:
-    {{ auditbeat_module.system.datasets | to_nice_yaml | trim | indent(4) }}
+    {{ auditbeat_module_windows.system.datasets | to_nice_yaml | trim | indent(4) }}
 
   # How often datasets send state updates with the
   # current state of the system (e.g. all currently
   # running processes, all open sockets).
-  state.period: {{ auditbeat_module.system.state_period | default('12h') }}
+  state.period: {{ auditbeat_module_windows.system.state_period | default('12h') }}
 
-  # Enabled by default. Auditbeat will read password fields in
-  # /etc/passwd and /etc/shadow and store a hash locally to
-  # detect any changes.
-  user.detect_password_changes: {{ auditbeat_module.system.user_detect_password_changes | default(true) }}
-
-  # File patterns of the login record files.
-  login.wtmp_file_pattern: {{ auditbeat_module.system.login_wtmp_pattern | default('/var/log/wtmp*') }}
-  login.btmp_file_pattern: {{ auditbeat_module.system.login_btmp_pattern | default('/var/log/btmp*') }}
 {% endif %}
 #==================== Elasticsearch template setting ==========================
 setup.template.enabled: {{ auditbeat_template.enabled | default(true) }}

@@ -1,42 +1,67 @@
 ---
+- import_tasks: "Windows32bit.yml"
+  when:
+    - ansible_os_family == "Windows"
+    - ansible_architecture == "32-bit"
+
+- import_tasks: "Windows64bit.yml"
+  when:
+    - ansible_os_family == "Windows"
+    - ansible_architecture == "64-bit"
+
 - import_tasks: "RedHat.yml"
   when: ansible_os_family == "RedHat"
 
 - import_tasks: "Debian.yml"
   when: ansible_os_family == "Debian"
 
-- name: Collect service facts
+# Following plays are Linux only specific, all Windows plays are in Windows32bit.yml and Windows64bit.yml
+- name: (Linux) Collect service facts
   service_facts:
-
+  when:
+    - ansible_os_family != "Windows"
 #This is necessary, systemd won't allow auditd to be stopped and Ansible has bug when it doesn't use the service binary even if explicitly told
-- name: Stop auditd
+- name: (Linux) Stop auditd
   command:
     cmd: service auditd stop
     warn: False
-  when: ansible_facts.services['auditd'] is defined
+  when:
+    - ansible_facts.services['auditd'] is defined
+    - ansible_os_family != "Windows"
   tags: install
 
-- name: Remove auditd from starting on boot
+- name: (Linux) Remove auditd from starting on boot
   command:
     cmd: chkconfig auditd off
     warn: False
-  when: ansible_facts.services['auditd'] is defined
+  when:
+    - ansible_facts.services['auditd'] is defined
+    - ansible_os_family != "Windows"
   tags: install
 
-- name: Install auditbeat
-  package:
-    name: auditbeat
+- name: (Debian/Ubuntu) Install auditbeat apt
+  apt:
+    name: auditbeat={{ auditbeat_service.version }}
     state: present
+  when: ansible_os_family == "Debian"
   tags: install
 
-- name: Create auditbeat configuration file
+- name: (REHL/CentOS) Install auditbeat yum
+  yum:
+    name: auditbeat-{{ auditbeat_service.version }}
+    state: present
+  when: ansible_os_family == "RedHat"
+  tags: install
+
+- name: (Linux) Create auditbeat configuration file
   template:
     src: auditbeat.yml.j2
     dest: "{{ auditbeat_service.config_path }}/auditbeat.yml"
+  when: ansible_os_family != "Windows"
   notify: restart-auditbeat
   tags: configure
 
-- name: Install auditing rules for auditbeat
+- name: (Linux) Install auditing rules for auditbeat
   copy:
     src: files/auditd-attack.conf
     dest: "{{ auditbeat_service.config_path }}/audit.rules.d/"
@@ -44,5 +69,7 @@
     group: root
     mode: '0644'
   tags: configure
+  when:
+    - ansible_os_family != "Windows"
+    - auditbeat_service.install_rules
   notify: restart-auditbeat
-  when: auditbeat_service.install_rules

@@ -48,10 +48,15 @@ galaxy_info:
      versions:
        - jessie
        - stretch
+   - name: Windows
+     versions:
+       - 2016
+       - 2019
 
   galaxy_tags:
     - security
     - linux
+    - windows
     - elastic
     - logging
     - monitoring

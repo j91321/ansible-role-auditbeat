@@ -1,5 +1,9 @@
 ---
 auditbeat_service:
+  install_path_windows64: "C:\\Program Files\\Elastic\\auditbeat"
+  install_path_windows32: "C:\\Program Files\\Elastic\\auditbeat"
+  version: "7.6.0"
+  download: true
   config_path: /etc/auditbeat
   install_rules: true
 

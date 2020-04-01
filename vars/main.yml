@@ -20,3 +20,16 @@ auditbeat_module:
       - process
       - socket
       - user
+auditbeat_module_windows:
+  file_integrity:
+    enabled: true
+    paths:
+      - C:\windows
+      - C:\windows\system32
+      - C:\Program Files
+      - C:\Program Files (x86)
+  system:
+    enabled: true
+    datasets:
+      - host
+      - process
