@@ -6,7 +6,6 @@
       - apt-transport-https
     state: present
 
-
 - name: (Debian/Ubuntu) Add Elasticsearch repository GPG key
   apt_key:
     url: "https://artifacts.elastic.co/GPG-KEY-elasticsearch"
