@@ -1,0 +1,21 @@
+image: "python:3.7-buster"
+services:
+  - docker:19.03.8-dind
+before_script:
+  - pip install molecule yamllint ansible-lint docker
+
+test:ubuntu1804:
+  stage: test
+  variables:
+    MOLECULE_DISTRO: ubuntu1804
+  script:
+    - molecule test
+
+test:ubuntu1604:
+  stage: test
+  variables:
+    MOLECULE_DISTRO: ubuntu1604
+  script:
+    - molecule test
+
+
