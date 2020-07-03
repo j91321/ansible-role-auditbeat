@@ -3,6 +3,9 @@ dependency:
   name: galaxy
 driver:
   name: docker
+lint: |
+  set -e
+  ansible-lint
 platforms:
   - name: windows-os-base
     image: windows-local/windows-os-base:latest
