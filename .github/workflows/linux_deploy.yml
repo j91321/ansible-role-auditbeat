@@ -1,0 +1,38 @@
+name: Molecule test and deploy
+on:
+  push:
+    branches:
+      - 'master'
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        image:
+          - centos7
+          - centos8
+          - ubuntu1604
+          - ubuntu1804
+          - ubuntu2004
+          - debian8
+          - debian9
+          - debian10
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+        with:
+          path: "${{ github.repository }}"
+      - name: Run molecule tests
+        uses: robertdebock/molecule-action@2.6.1
+        with:
+          image: "${{ matrix.image }}"
+          namespace: geerlingguy
+  deploy-galaxy:
+    needs: test
+    runs-on: ubuntu-latest
+    steps:
+      - name: Publish on Ansible Galaxy
+        uses: robertdebock/galaxy-action@1.0.1
+        with:
+          galaxy_api_key: ${{ secrets.galaxy_api_key }}

@@ -1,6 +1,11 @@
 ansible-role-auditbeat
 =========
 
+[![GitHub license](https://img.shields.io/github/license/j91321/ansible-role-auditbeat?style=flat-square)](https://github.com/j91321/ansible-role-auditbeat/blob/master/LICENSE)
+[![GitHub last commit](https://img.shields.io/github/last-commit/j91321/ansible-role-auditbeat.svg?style=flat-square)](https://github.com/j91321/ansible-role-auditbeat/commit/master)
+![Build](https://github.com/j91321/ansible-role-auditbeat/workflows/Molecule%20test%20and%20deploy/badge.svg)
+[![Twitter](https://img.shields.io/twitter/follow/j91321.svg?style=social&label=Follow)](https://twitter.com/j91321)
+
 An Ansible role that replaces auditd with Auditbeat. Included modified version of rules from [bfuzzy1/auditd-attack](https://github.com/bfuzzy1/auditd-attack). 
 
 ![MITRE ATT&CK framework mapping](https://raw.githubusercontent.com/j91321/ansible-role-auditbeat/master/extras/layer.svg?sanitize=true)
@@ -8,10 +13,13 @@ An Ansible role that replaces auditd with Auditbeat. Included modified version o
 Please test the rules properly before using on production. Some rules may cause performance impact depending on your setup. For more information on Auditbeat please visit the official [documentation](https://www.elastic.co/guide/en/beats/auditbeat/current/auditbeat-overview.html)
 
 Supported platfroms:
+- Ubuntu 20.04
 - Ubuntu 18.04
 - Ubuntu 16.04
+- CentOS 8
 - CentOS 7
 - CentOS 6
+- Debian 10
 - Debian 9
 - Debian 8
 - Windows 10\*
