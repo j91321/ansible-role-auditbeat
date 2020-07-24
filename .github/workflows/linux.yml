@@ -3,6 +3,7 @@ on:
   push:
     branches:
       - "*"
+      - '!master'
     pull_request:
       branches: [ master ]
 
@@ -29,3 +30,4 @@ jobs:
         uses: robertdebock/molecule-action@2.6.1
         with:
           image: "${{ matrix.image }}"
+          namespace: geerlingguy
