@@ -44,10 +44,12 @@ galaxy_info:
      versions:
        - xenial
        - bionic
+       - focal
    - name: Debian
      versions:
        - jessie
        - stretch
+       - buster
    - name: Windows
      versions:
        - 2016
