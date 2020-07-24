@@ -1,12 +1,8 @@
-name: Molecule test 
+name: Molecule test and deploy
 on:
   push:
     branches:
-      - "*"
-      - '!master'
-    pull_request:
-      branches: [ master ]
-
+      - 'master'
 jobs:
   test:
     runs-on: ubuntu-latest
@@ -32,3 +28,11 @@ jobs:
         with:
           image: "${{ matrix.image }}"
           namespace: geerlingguy
+  deploy-galaxy:
+    needs: test
+    runs-on: ubuntu-latest
+    steps:
+      - name: Publish on Ansible Galaxy
+        uses: robertdebock/galaxy-action@1.0.1
+        with:
+          galaxy_api_key: ${{ secrets.galaxy_api_key }}
