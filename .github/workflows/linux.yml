@@ -28,5 +28,4 @@ jobs:
       - name: Run molecule tests
         uses: robertdebock/molecule-action@2.6.1
         with:
-          image: "docker-${{ matrix.image }}-ansible"
-          namespace: geerlingguy
+          image: "${{ matrix.image }}"
