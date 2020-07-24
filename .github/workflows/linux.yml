@@ -11,9 +11,10 @@ jobs:
   test:
     runs-on: ubuntu-latest
     strategy:
+      fail-fast: false
       matrix:
         image:
-          - cenots7
+          - centos7
           - centos8
           - ubuntu1604
           - ubuntu1804
