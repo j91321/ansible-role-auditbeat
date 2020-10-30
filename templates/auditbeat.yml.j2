@@ -60,7 +60,7 @@ cloud.auth: {{ auditbeat_cloud.auth }}
 {% if auditbeat_ilm is defined %}
 #=================================== ILM ======================================
 setup.ilm.enabled: {{ auditbeat_ilm.enabled | default("auto") }}
-{% if auditbeat_ilm.enabled != "false" %} 
+{% if auditbeat_ilm.enabled != "false" %}
 setup.ilm.rollover_alias: {{ auditbeat_ilm.rollover_alias | default("auditbeat-%{[agent.version]}") }}
 setup.ilm.pattern: {{ auditbeat_ilm.pattern | default("%{now/d}-000001") }}
 setup.ilm.policy_name: {{ auditbeat_ilm.policy_name | default("auditbeat-%{[agent.version]}") }}
@@ -83,7 +83,10 @@ output.elasticsearch:
   password: {{ auditbeat_output.elasticsearch.security.password }}
   protocol: {{ auditbeat_output.elasticsearch.security.protocol }}
 {% if auditbeat_output.elasticsearch.security.ssl_certificate_authorities is defined %}
-  ssl.certificate_authorities: {{ auditbeat_output.elasticsearch.security.ssl_certificate_authorities | to_json }}
+  ssl.certificate_authorities: {{ auditbeat_output.elasticsearch.ssl_certificate_authorities | to_json }}
+{% if auditbeat_output.elasticsearch.security.ssl_certificate_authorities is defined %}
+  ssl.verification_mode: {{ auditbeat_output.elasticsearch.ssl.verification_mode }}
+{% endif %}
 {% endif %}
 {% endif %}
 {% endif %}
