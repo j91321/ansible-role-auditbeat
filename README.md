@@ -6,7 +6,7 @@ ansible-role-auditbeat
 ![Build](https://github.com/j91321/ansible-role-auditbeat/workflows/Molecule%20test%20and%20deploy/badge.svg)
 [![Twitter](https://img.shields.io/twitter/follow/j91321.svg?style=social&label=Follow)](https://twitter.com/j91321)
 
-An Ansible role that replaces auditd with Auditbeat. Included modified version of rules from [bfuzzy1/auditd-attack](https://github.com/bfuzzy1/auditd-attack). 
+An Ansible role that replaces auditd with Auditbeat. Included modified version of rules from [bfuzzy1/auditd-attack](https://github.com/bfuzzy1/auditd-attack).
 
 ![MITRE ATT&CK framework mapping](https://raw.githubusercontent.com/j91321/ansible-role-auditbeat/master/extras/layer.svg?sanitize=true)
 
@@ -85,7 +85,7 @@ Example of Redis output:
     auditbeat_output:
       type: redis
       redis:
-        hosts: 
+        hosts:
 	  - 192.168.100.4
 	password: "redis_password"
 	key: "auditbeat"
@@ -209,4 +209,3 @@ Notes
 -----
 
 Tests require some further improvements. Waiting for beats issue [#8280](https://github.com/elastic/beats/issues/8280) to be resolved for better tests.
-
