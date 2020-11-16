@@ -73,6 +73,7 @@ Specifies the output configuration to Elasticsearch without Security enabled.
           username: auditbeat_writer
           password: pa$$word
           protocol: https
+	  verification_mode: certificate
           ssl_certificate_authorities:
             - "/etc/ca/my_ca.crt"
 
@@ -144,9 +145,9 @@ Example Playbook
   become: yes
   vars:
     auditbeat_service:
-      install_path_windows32: "C:\\Program Files\\monitoring\\winlogbeat"
-      install_path_windows64: "C:\\Program Files\\monitoring\\winlogbeat"
-      version: "7.6.0"
+      install_path_windows32: "C:\\Program Files\\monitoring\\auditbeat"
+      install_path_windows64: "C:\\Program Files\\monitoring\\auditbeat"
+      version: "7.9.3"
       download: true
       install_rules: true
     auditbeat_template:
