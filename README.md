@@ -73,7 +73,7 @@ Specifies the output configuration to Elasticsearch without Security enabled.
           username: auditbeat_writer
           password: pa$$word
           protocol: https
-          verification_mode: certificate
+          ssl_verification_mode: certificate
           ssl_certificate_authorities:
             - "/etc/ca/my_ca.crt"
 
