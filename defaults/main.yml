@@ -14,3 +14,8 @@ auditbeat_output:
       - "localhost:9200"
     security:
       enabled: false
+
+auditbeat_processors: |
+  - add_host_metadata: ~
+  - add_cloud_metadata: ~
+  - add_docker_metadata: ~
