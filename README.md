@@ -56,6 +56,10 @@ Ansible variables from `defaults/main.yml`
           - "localhost:9200"
         security:
           enabled: false
+    auditbeat_processors: |
+      - add_host_metadata: ~
+      - add_cloud_metadata: ~
+      - add_docker_metadata: ~
 
 The `auditbeat_service.install_rules` can be changed to false if you don't want to use the rules included.
 
@@ -87,9 +91,20 @@ Example of Redis output:
       type: redis
       redis:
         hosts:
-	  - 192.168.100.4
-	password: "redis_password"
-	key: "auditbeat"
+          - 192.168.100.4
+        password: "redis_password"
+        key: "auditbeat"
+
+Example of filtering high volume logs using processors
+
+    auditbeat_processors: |
+      - add_host_metadata: ~
+      - add_cloud_metadata: ~
+      - add_docker_metadata: ~
+      - drop_event.when.and:
+        - equals.event.action: "network_flow"
+        - equals.server.port: 10050
+        - equals.process.name: "zabbix_agentd"
 
 Ansible variables from `vars/main.yml`
 
