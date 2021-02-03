@@ -82,6 +82,13 @@ output.elasticsearch:
   username: {{ auditbeat_output.elasticsearch.security.username }}
   password: {{ auditbeat_output.elasticsearch.security.password }}
   protocol: {{ auditbeat_output.elasticsearch.security.protocol }}
+{% if 'ssl' in auditbeat_output.elasticsearch %}
+  ssl:
+{% if 'certificate_authorities' in auditbeat_output.elasticsearch.ssl %}    certificate_authorities: {{ auditbeat_ssl_dir }}/{{ auditbeat_output.elasticsearch.ssl.certificate_authorities | basename }} {% endif %} 
+    certificate: {{ auditbeat_ssl_dir }}/{{ auditbeat_output.elasticsearch.ssl.certificate | basename }}
+    key: {{ auditbeat_ssl_dir }}/{{ auditbeat_output.elasticsearch.ssl.key | basename }}
+    insecure: {{ auditbeat_output.elasticsearch.ssl.insecure }}
+{% endif %}
 {% if auditbeat_output.elasticsearch.security.ssl_certificate_authorities is defined %}
   ssl.certificate_authorities: {{ auditbeat_output.elasticsearch.security.ssl_certificate_authorities | to_json }}
 {% endif %}
@@ -96,6 +103,13 @@ output.logstash:
   # The Logstash hosts
   hosts: {{ auditbeat_output.logstash.hosts | to_json }}
 
+{% if 'ssl' in auditbeat_output.logstash %}
+  ssl:
+{% if 'certificate_authorities' in auditbeat_output.logstash.ssl %}    certificate_authorities: {{ auditbeat_ssl_dir }}/{{ auditbeat_output.logstash.ssl.certificate_authorities | basename }} {% endif %} 
+    certificate: {{ auditbeat_ssl_dir }}/{{ auditbeat_output.logstash.ssl.certificate | basename }}
+    key: {{ auditbeat_ssl_dir }}/{{ auditbeat_output.logstash.ssl.key | basename }}
+    insecure: {{ auditbeat_output.logstash.ssl.insecure }}
+{% endif %}
 {% if auditbeat_output.logstash.security.ssl_certificate_authorities is defined %}}
   # Optional SSL. By default is off.
   # List of root certificates for HTTPS server verifications
