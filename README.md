@@ -83,6 +83,22 @@ Specifies the output configuration to Elasticsearch without Security enabled.
 
 Specifies the output configuration to Elasticsearch with security enabled, certificate authority must be present on server.
 
+    auditbeat_ssl_key_file: my-logstash.p8
+    auditbeat_ssl_certificate_file: my-logstash.crt
+    auditbeat_ssl_insecure: True
+    auditbeat_output:
+      type: elasticsearch
+      elasticsearch:
+        hosts:
+          - "localhost:9200"
+        ssl:
+          certificate_authorities: "{{ auditbeat_ssl_certificate_file }}"
+          certificate: "{{ auditbeat_ssl_certificate_file }}"
+          key: "{{ auditbeat_ssl_key_file }}"
+          insecure: "{{ auditbeat_ssl_insecure }}"
+
+Specifies the output configuration to Elasticsoarch with ssl authentication enabled, Logstash can be configured in the same way.
+
 Variable `auditbeat_output.type` takes three values either `logstash`, `elasticsearch` or `redis`. This is because if you have ansible `hash_behaviour` set to `merge` role would install both elasticsearch and logstash outputs when using logstash output type which is wrong.
 
 Example of Redis output:
