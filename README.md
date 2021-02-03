@@ -83,8 +83,8 @@ Specifies the output configuration to Elasticsearch without Security enabled.
 
 Specifies the output configuration to Elasticsearch with security enabled, certificate authority must be present on server.
 
-    auditbeat_ssl_key_file: my-logstash.p8
-    auditbeat_ssl_certificate_file: my-logstash.crt
+    auditbeat_ssl_key_file: my-ssl.p8
+    auditbeat_ssl_certificate_file: my-ssl.crt
     auditbeat_ssl_insecure: True
     auditbeat_output:
       type: elasticsearch
