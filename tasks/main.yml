@@ -53,6 +53,28 @@
   when: ansible_os_family == "RedHat"
   tags: install
 
+- name: Ensure Auditbeat SSL key pair directory exists.
+  file:
+    path: "{{ auditbeat_ssl_dir }}"
+    state: directory
+    mode: 0755
+  when: auditbeat_ssl_key_file | default(false)
+
+- name: Copy SSL key and cert for auditbeat.
+  copy:
+    src: "{{ item }}"
+    dest: "{{ auditbeat_ssl_dir }}/{{ item | basename }}"
+    mode: 0644
+  loop:
+    - "{{ auditbeat_ssl_key_file }}"
+    - "{{ auditbeat_ssl_certificate_file }}"
+    - "{{ auditbeat_ssl_certificate_authorities_file }}"
+  notify: restart-auditbeat
+  when:
+    - auditbeat_ssl_key_file | default(false)
+    - auditbeat_ssl_certificate_file | default(false)
+    - auditbeat_ssl_certificate_authorities_file | default(false)
+
 - name: (Linux) Create auditbeat configuration file
   template:
     src: auditbeat.yml.j2
