@@ -19,3 +19,9 @@ auditbeat_processors: |
   - add_host_metadata: ~
   - add_cloud_metadata: ~
   - add_docker_metadata: ~
+
+auditbeat_ssl_dir: /etc/pki/auditbeat
+auditbeat_ssl_key_file: ""
+auditbeat_ssl_certificate_file: ""
+auditbeat_ssl_certificate_authorities: ""
+auditbeat_ssl_insecure: "false"
