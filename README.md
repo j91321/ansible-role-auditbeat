@@ -44,10 +44,11 @@ Ansible variables from `defaults/main.yml`
     auditbeat_service:
       install_path_windows64: "C:\\Program Files\\Elastic\\auditbeat"
       install_path_windows32: "C:\\Program Files\\Elastic\\auditbeat"
-      version: "7.6.0"
+      version: "7.13.1"
       download: true
       config_path: /etc/auditbeat
       install_rules: true
+      rule_file: auditd-attack.conf 
 
     auditbeat_output:
       type: "elasticsearch"
@@ -162,9 +163,10 @@ Example Playbook
     auditbeat_service:
       install_path_windows32: "C:\\Program Files\\monitoring\\auditbeat"
       install_path_windows64: "C:\\Program Files\\monitoring\\auditbeat"
-      version: "7.9.3"
+      version: "7.13.1"
       download: true
       install_rules: true
+      rule_file: auditd-attack.conf
     auditbeat_template:
       enabled: false
     auditbeat_general:
