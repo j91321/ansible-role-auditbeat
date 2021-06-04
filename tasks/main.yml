@@ -63,7 +63,7 @@
 
 - name: (Linux) Install auditing rules for auditbeat
   copy:
-    src: files/auditd-attack.conf
+    src: files/{{ auditbeat_service.rule_file }}
     dest: "{{ auditbeat_service.config_path }}/audit.rules.d/"
     owner: root
     group: root
