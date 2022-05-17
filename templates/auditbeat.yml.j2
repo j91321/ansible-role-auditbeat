@@ -96,7 +96,7 @@ output.logstash:
   # The Logstash hosts
   hosts: {{ auditbeat_output.logstash.hosts | to_json }}
 
-{% if auditbeat_output.logstash.security.ssl_certificate_authorities is defined %}}
+{% if auditbeat_output.logstash.security.ssl_certificate_authorities is defined %}
   # Optional SSL. By default is off.
   # List of root certificates for HTTPS server verifications
   ssl.certificate_authorities: {{ auditbeat_output.logstash.security.ssl_certificate_authorities | to_json }}
