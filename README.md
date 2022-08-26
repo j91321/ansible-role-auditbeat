@@ -12,7 +12,7 @@ An Ansible role that replaces auditd with Auditbeat. Included modified version o
 
 Please test the rules properly before using on production. Some rules may cause performance impact depending on your setup. For more information on Auditbeat please visit the official [documentation](https://www.elastic.co/guide/en/beats/auditbeat/current/auditbeat-overview.html)
 
-Supported platfroms:
+Supported platforms:
 - Ubuntu 20.04
 - Ubuntu 18.04
 - Ubuntu 16.04
@@ -22,6 +22,7 @@ Supported platfroms:
 - Debian 10
 - Debian 9
 - Debian 8
+- Gentoo \*\*
 - Windows 10\*
 - Windows Server 2019\*
 - Windows Server 2016\*
@@ -29,6 +30,8 @@ Supported platfroms:
 Auditbeat should also work on Oracle Enterprise Linux but only with RHCK.
 
 \* Auditbeat on Windows supports different set of features. If you wish to achieve similar functionality use Sysmon + Winlogbeat
+
+\*\* If you want to run auditbeat on Gentoo, you will need to create your own ebuild, if you want to use the `system` metricset, you will need to build auditbeat with x-pack folder with the elastic licence.
 
 If you wish to run Auditbeat from docker container use the official docker [image](https://hub.docker.com/_/auditbeat) provided by Elastic.
 
@@ -61,6 +64,9 @@ Ansible variables from `defaults/main.yml`
       - add_host_metadata: ~
       - add_cloud_metadata: ~
       - add_docker_metadata: ~
+    auditbeat_portage:
+      package: =auditbeat-{{ auditbeat_service.version }}
+      getbinpkg: no
 
 The `auditbeat_service.install_rules` can be changed to false if you don't want to use the rules included.
 
