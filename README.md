@@ -31,7 +31,7 @@ Auditbeat should also work on Oracle Enterprise Linux but only with RHCK.
 
 \* Auditbeat on Windows supports different set of features. If you wish to achieve similar functionality use Sysmon + Winlogbeat
 
-\*\* If you want to run auditbeat on Gentoo, you will need to create your own ebuild, if you want to use the `system` metricset, you will need to build auditbeat with x-pack folder with the elastic licence.
+\*\* If you want to run auditbeat on Gentoo, you will need to create your own ebuild, if you want to use the `system` metricset, you will need to build auditbeat with x-pack folder with the elastic licence. If you want to use Sockets, you will need Kprobe enabled in your kernel's menuconfig
 
 If you wish to run Auditbeat from docker container use the official docker [image](https://hub.docker.com/_/auditbeat) provided by Elastic.
 
