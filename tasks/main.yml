@@ -37,6 +37,7 @@
   when:
     - ansible_facts.services['auditd'] is defined
     - ansible_os_family != "Windows"
+    - ansible_os_family != "Gentoo"
   tags: install
 
 - name: (Debian/Ubuntu) Install auditbeat apt
@@ -51,6 +52,14 @@
     name: auditbeat-{{ auditbeat_service.version }}
     state: present
   when: ansible_os_family == "RedHat"
+  tags: install
+
+# INFO: Based on where and how you generate your auditbeat portage package, you may need to change the package name
+- name: (Gentoo) Install auditbeat portage
+  community.general.portage:
+    package: "{{ auditbeat_portage.package }}"
+    getbinpkg: "{{ auditbeat_portage.getbinpkg }}"
+  when: ansible_os_family == "Gentoo"
   tags: install
 
 - name: (Linux) Create auditbeat configuration file
