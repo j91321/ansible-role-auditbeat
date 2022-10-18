@@ -107,7 +107,7 @@ output.redis:
 
 {% if auditbeat_processors is defined %}
 processors:
-{{ auditbeat_processors | indent( width=2, indentfirst=True) }}
+  {{ auditbeat_processors | indent( width=2 ) }}
 {% endif %}
 
 #============================== X-Pack Monitoring ===============================
