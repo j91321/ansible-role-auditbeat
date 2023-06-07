@@ -19,3 +19,31 @@
     update_cache: yes
     state: present
   tags: install
+
+- name: (Debian/Ubuntu) Get installed auditbeat version
+  command: dpkg-query --showformat='${Version}' --show auditbeat
+  register: installed_ab_version
+  failed_when: False
+  changed_when: False
+  check_mode: no
+  tags: install
+
+- name: (Debian/Ubuntu) Allow auditbeat to be upgraded
+  ansible.builtin.dpkg_selections:
+    name: auditbeat
+    selection: install
+  when:
+    installed_ab_version.stdout and installed_ab_version.stdout != auditbeat_service.version
+  tags: install
+
+- name: (Debian/Ubuntu) Install auditbeat apt
+  apt:
+    name: auditbeat={{ auditbeat_service.version }}
+    state: present
+  tags: install
+
+- name: (Debian/Ubuntu) Prevent auditbeat from being upgraded
+  ansible.builtin.dpkg_selections:
+    name: auditbeat
+    selection: hold
+  tags: install

@@ -51,7 +51,7 @@ Ansible variables from `defaults/main.yml`
       download: true
       config_path: /etc/auditbeat
       install_rules: true
-      rule_file: auditd-attack.conf 
+      rule_file: auditd-attack.conf
 
     auditbeat_output:
       type: "elasticsearch"
@@ -66,7 +66,7 @@ Ansible variables from `defaults/main.yml`
       - add_docker_metadata: ~
     auditbeat_portage:
       package: =auditbeat-{{ auditbeat_service.version }}
-      getbinpkg: no
+      getbinpkgonly: true
 
 The `auditbeat_service.install_rules` can be changed to false if you don't want to use the rules included.
 

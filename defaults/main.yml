@@ -6,7 +6,7 @@ auditbeat_service:
   download: true
   config_path: /etc/auditbeat
   install_rules: true
-  rule_file: auditd-attack.conf 
+  rule_file: auditd-attack.conf
 
 auditbeat_output:
   type: "elasticsearch"
