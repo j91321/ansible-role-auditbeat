@@ -1,4 +1,10 @@
 ---
+- name: (REHL/CentOS) Install dependencies
+  yum:
+    name: yum-plugin-versionlock
+    state: present
+    update_cache: yes
+
 - name: (REHL/CentOS) Add Elasticsearch 7.X repository
   yum_repository:
     name: "elastic-7.x"
@@ -7,4 +13,29 @@
     gpgkey: "https://packages.elastic.co/GPG-KEY-elasticsearch"
     state: present
   notify: yum-clean-metadata
+  tags: install
+
+- name: (REHL/CentOS) Check if requested auditbeat release lock exists
+  shell: 'yum versionlock list | grep auditbeat | grep -c "{{ auditbeat_service.version }}"'
+  register: auditbeat_requested_release_locked
+  args:
+    warn: false
+  failed_when: False
+  changed_when: False
+  check_mode: False
+  tags: install
+
+- name: (REHL/CentOS) Lock auditbeat release
+  shell: yum versionlock delete 0:auditbeat* ; yum versionlock add auditbeat-{{ auditbeat_service.version }}
+  args:
+    warn: false
+  tags: install
+  when:
+    - auditbeat_requested_release_locked is defined
+    - auditbeat_requested_release_locked.stdout|int == 0
+
+- name: (REHL/CentOS) Install auditbeat yum
+  yum:
+    name: auditbeat-{{ auditbeat_service.version }}
+    state: present
   tags: install
