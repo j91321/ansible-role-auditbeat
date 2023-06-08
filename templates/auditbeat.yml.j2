@@ -11,6 +11,7 @@ auditbeat.modules:
 - module: file_integrity
   paths:
     {{ auditbeat_module.file_integrity.paths | to_nice_yaml | trim | indent(4) }}
+  max_file_size: {{ auditbeat_module.file_integrity.max_file_size | default("100 MiB") }}
 {% endif %}
 {% if auditbeat_module.system.enabled | bool %}
 - module: system
@@ -30,6 +31,8 @@ auditbeat.modules:
   # File patterns of the login record files.
   login.wtmp_file_pattern: {{ auditbeat_module.system.login_wtmp_pattern | default('/var/log/wtmp*') }}
   login.btmp_file_pattern: {{ auditbeat_module.system.login_btmp_pattern | default('/var/log/btmp*') }}
+
+  process.hash.max_file_size: {{ auditbeat_module.system["process.hash.max_file_size"] | default("100 MiB") }}
 {% endif %}
 #==================== Elasticsearch template setting ==========================
 setup.template.enabled: {{ auditbeat_template.enabled | default(true) }}
