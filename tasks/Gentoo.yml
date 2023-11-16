@@ -1,0 +1,16 @@
+---
+- name: (Gentoo) Stop auditd
+  ansible.builtin.service:
+    name: auditd
+    state: stopped
+    enabled: false
+  when:
+    - ansible_facts.services['auditd'] is defined
+  tags: install
+
+- name: (Gentoo) Install auditbeat portage
+  community.general.portage:
+    package: "{{ auditbeat_portage.package }}"
+    getbinpkg: "{{ auditbeat_portage.getbinpkg|default(omit) }}"
+    getbinpkgonly: "{{ auditbeat_portage.getbinpkgonly|default(omit) }}"
+  tags: install

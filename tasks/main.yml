@@ -15,70 +15,57 @@
 - import_tasks: "Debian.yml"
   when: ansible_os_family == "Debian"
 
-# Following plays are Linux only specific, all Windows plays are in Windows32bit.yml and Windows64bit.yml
-- name: (Linux) Collect service facts
-  service_facts:
-  when:
-    - ansible_os_family != "Windows"
-#This is necessary, systemd won't allow auditd to be stopped and Ansible has bug when it doesn't use the service binary even if explicitly told
-- name: (Linux) Stop auditd
-  command:
-    cmd: service auditd stop
-    warn: False
-  when:
-    - ansible_facts.services['auditd'] is defined
-    - ansible_os_family != "Windows"
-  tags: install
-
-- name: (Linux) Remove auditd from starting on boot
-  command:
-    cmd: chkconfig auditd off
-    warn: False
-  when:
-    - ansible_facts.services['auditd'] is defined
-    - ansible_os_family != "Windows"
-    - ansible_os_family != "Gentoo"
-  tags: install
-
-- name: (Debian/Ubuntu) Install auditbeat apt
-  apt:
-    name: auditbeat={{ auditbeat_service.version }}
-    state: present
-  when: ansible_os_family == "Debian"
-  tags: install
-
-- name: (REHL/CentOS) Install auditbeat yum
-  yum:
-    name: auditbeat-{{ auditbeat_service.version }}
-    state: present
-  when: ansible_os_family == "RedHat"
-  tags: install
-
-# INFO: Based on where and how you generate your auditbeat portage package, you may need to change the package name
-- name: (Gentoo) Install auditbeat portage
-  community.general.portage:
-    package: "{{ auditbeat_portage.package }}"
-    getbinpkg: "{{ auditbeat_portage.getbinpkg }}"
+- import_tasks: "Gentoo.yml"
   when: ansible_os_family == "Gentoo"
-  tags: install
 
-- name: (Linux) Create auditbeat configuration file
-  template:
-    src: auditbeat.yml.j2
-    dest: "{{ auditbeat_service.config_path }}/auditbeat.yml"
-  when: ansible_os_family != "Windows"
-  notify: restart-auditbeat
-  tags: configure
+# Following plays are Linux only specific, all Windows plays are in Windows32bit.yml and Windows64bit.yml
+- name: (Linux) Linux only tasks
+  block:
+    - name: (Linux) Collect service facts
+      service_facts:
 
-- name: (Linux) Install auditing rules for auditbeat
-  copy:
-    src: files/{{ auditbeat_service.rule_file }}
-    dest: "{{ auditbeat_service.config_path }}/audit.rules.d/"
-    owner: root
-    group: root
-    mode: '0644'
-  tags: configure
+    # This is necessary, systemd won't allow auditd to be stopped and Ansible has bug when it doesn't use the service binary even if explicitly told
+    - name: (Linux) Stop auditd
+      command:
+        cmd: service auditd stop
+        warn: False
+      when:
+        - ansible_facts.services['auditd'] is defined
+        - ansible_os_family != "Gentoo"
+      tags: install
+
+    - name: (Linux) Remove auditd from starting on boot
+      command:
+        cmd: chkconfig auditd off
+        warn: False
+      when:
+        - ansible_facts.services['auditd'] is defined
+        - ansible_os_family != "Gentoo"
+      tags: install
+
+    - name: (Linux) Create auditbeat configuration file
+      template:
+        src: auditbeat.yml.j2
+        dest: "{{ auditbeat_service.config_path }}/auditbeat.yml"
+      notify: restart-auditbeat
+      tags: configure
+
+    - name: (Linux) Install auditing rules for auditbeat
+      copy:
+        src: files/{{ auditbeat_service.rule_file }}
+        dest: "{{ auditbeat_service.config_path }}/audit.rules.d/"
+        owner: root
+        group: root
+        mode: '0644'
+      tags: configure
+      when:
+        - auditbeat_service.install_rules
+      notify: restart-auditbeat
+
+    - name: (Linux) Start and enable auditbeat
+      ansible.builtin.service:
+        name: auditbeat
+        state: started
+        enabled: true
   when:
     - ansible_os_family != "Windows"
-    - auditbeat_service.install_rules
-  notify: restart-auditbeat
